@@ -1,0 +1,5 @@
+gisdata>=0.4.4
+lxml>=2.2.8
+OWSLib>=0.5.1
+Shapely>=1.2.15
+SQLAlchemy>=0.6
