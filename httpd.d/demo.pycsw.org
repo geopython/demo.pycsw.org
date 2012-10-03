@@ -18,6 +18,7 @@
   WSGIDaemonProcess pycsw user=www-data group=www-data threads=1 processes=5 python-path=/osgeo/demo.pycsw.org/lib/python2.6/site-packages/
   WSGIProcessGroup pycsw
   WSGIPassAuthorization On
+  WSGIApplicationGroup %{GLOBAL}
 
   SetEnv PYTHONPATH /osgeo/demo.pycsw.org/lib/python2.6/site-packages/
 
