@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<metadata>
+<idinfo>
+<citation>
+<citeinfo>
+<origin>NOAA/ESRL Physical Sciences Division</origin>
+<pubdate>20090901</pubdate>
+<title>CPC Merged Analysis of Precipitation Standard [POL 88.75 -88.75 180 -180]</title>
+<pubinfo>
+<pubplace>Boulder, CO</pubplace>
+<publish>NOAA/ESRL Physical Sciences Division</publish>
+</pubinfo>
+<onlink>ftp://ftp.cdc.noaa.govDatasets/cmap/</onlink>
+<onlink>http://www.esrl.noaa.gov/psd/thredds/dodsC/Datasets/cmap/</onlink>
+<onlink>http://www.esrl.noaa.gov/psd/data/gridded/data.cmap.html</onlink>
+</citeinfo>
+</citation>
+<descript>
+<abstract>\n The monthly data set consists of two files containing monthly averaged\n precipitation rate values. Values are obtained from 5 kinds of satellite\n estimates (GPI,OPI,SSM/I scattering, SSM/I emission and MSU). The enhanced\n file also includes blended NCEP/NCAR Reanalysis Precipitation values. The\n other just includes the satellite estimates.Pentad data is also available.\n This data set consists of monthly averaged precipitation rate values (mm/day).\n The data range\n is approximately 0 to 70mm/day. The pentad dataset consists of 73 \n pentads per year with the 12th pentad covering Feb 25-Mar 1 whether or not\n there is a leap year. The pentad starts on the date stored in the netCDF file.\n \n 	\n \n</abstract>
+<purpose>Scientific research.</purpose>
+<supplinf>
+Additional Fields:
+-----------------:
+StartDate: 19790101
+StopDate: 20090901
+Storage_Medium: online
+PSD Search Fields:
+Entry_ID: CDC008
+</supplinf>
+</descript>
+<timeperd>
+<timeinfo>
+<rngdates>
+<begdate>19790101</begdate>
+<enddate>20090901</enddate>
+</rngdates>
+</timeinfo>
+<current>Publication_Date: 20090901</current>
+</timeperd>
+<status>
+<progress>Complete</progress>
+<update>Irregular</update>
+</status>
+<spdom>
+<bounding>
+<westbc>-180</westbc>
+<eastbc>180</eastbc>
+<northbc>88.75</northbc>
+<southbc>-88.75</southbc>
+</bounding>
+</spdom>
+<keywords>
+<theme>
+<themekt>GCMD DIF 5.33</themekt>
+<themekey>CPC Merged Analysis of Precipitation Standard [POL 88.75 -88.75 180 -180]</themekey>
+<themekey>Precipitation</themekey>
+</theme>
+<place>
+<placekt>none</placekt>
+<placekey>Global</placekey>
+</place>
+<stratum>
+<stratkt>none</stratkt>
+<stratkey>none</stratkey>
+</stratum>
+<temporal>
+<tempkt>none</tempkt>
+<tempkey>19790101, 20090901</tempkey>
+</temporal>
+</keywords>
+<accconst>None.</accconst>
+<useconst>None. Acknowledgement of PSD would appreciated in products derived from these data.</useconst>
+<ptcontac>
+<cntinfo>
+<cntperp>
+<cntper>PSD Data Management</cntper>
+<cntorg>NOAA/ESRL Physical Sciences Division</cntorg>
+</cntperp>
+<cntaddr>
+<addrtype>mailing address</addrtype>
+<address>NOAA/ESRL Physical Sciences Division</address>
+<address>U.S. Dept. of Commerce</address>
+<address>NOAA, R/PSD</address>
+<address>325 Broadway</address>
+<city>Boulder</city>
+<state>CO</state>
+<postal>80305</postal>
+<country>USA</country>
+</cntaddr>
+<cntvoice>(303) 497-6640</cntvoice>
+<cntfax>(303) 497-6020</cntfax>
+<cntemail>esrl.psd.data@noaa.gov</cntemail>
+</cntinfo>
+</ptcontac>
+<secinfo>
+<secsys>None</secsys>
+<secclass>Unclassified</secclass>
+<sechandl>None</sechandl>
+</secinfo>
+<native>Data resides in netCDF files at PSD</native>
+</idinfo>
+<distinfo>
+<distrib>
+<cntinfo>
+<cntperp>
+<cntper>PSD Data Management</cntper>
+</cntperp>
+<cntaddr>
+<addrtype>mailing address</addrtype>
+<address>NOAA/ESRL Physical Sciences Division</address>
+<address>U.S. Dept. of Commerce</address>
+<address>NOAA, Code R/PSD</address>
+<address>325 Broadway</address>
+<city>Boulder</city>
+<state>CO</state>
+<postal>80305</postal>
+<country>USA</country>
+</cntaddr>
+<cntvoice>(303) 497-7200</cntvoice>
+<cntfax>(303) 497-6020</cntfax>
+<cntemail>esrl.psd.data@noaa.gov</cntemail>
+</cntinfo>
+</distrib>
+<distliab>No warranty expressed or implied.</distliab>
+</distinfo>
+<metainfo>
+<metd>20090901</metd>
+<metc>
+<cntinfo>
+<cntperp>
+<cntper>PSD Data Management</cntper>
+</cntperp>
+<cntaddr>
+<addrtype>mailing address</addrtype>
+<address>NOAA/ESRL Physical Sciences Division</address>
+<address>U.S. Dept. of Commerce</address>
+<address>NOAA, Code R/PSD</address>
+<address>325 Broadway</address>
+<city>Boulder</city>
+<state>CO</state>
+<postal>80305</postal>
+<country>USA</country>
+</cntaddr>
+<cntvoice>(303) 497-7200</cntvoice>
+<cntfax>(303) 497-6020</cntfax>
+<cntemail>esrl.psd.data@noaa.gov</cntemail>
+</cntinfo>
+</metc>
+<metstdn>FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+<metstdv>FGDC-STD-001-1998</metstdv>
+<metsi>
+<metscs>None</metscs>
+<metsc>Unclassified</metsc>
+<metshd>None</metshd>
+</metsi>
+</metainfo>
+</metadata>
