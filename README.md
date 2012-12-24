@@ -8,6 +8,7 @@ This is the setup for demo.pycsw.org
     cd /path/to/dir
     git clone https://github.com/geopython/demo.pycsw.org.git .
     # install deps
+    pip install -e .
     pip install -r requirements.txt
     # install pycsw source
     mkdir src && cd $_
