@@ -11,8 +11,7 @@ This is the setup for demo.pycsw.org
     pip install -e .
     pip install -r requirements.txt
     # install pycsw source
-    mkdir src && cd $_
-    git clone https://github.com/geopython/pycsw.git pycsw && cd $_
+    git clone https://github.com/geopython/pycsw.git src/pycsw && cd $_
     python setup.py build
     python setup.py install
     # setup data
