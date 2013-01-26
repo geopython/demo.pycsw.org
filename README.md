@@ -23,5 +23,5 @@ This is the setup for demo.pycsw.org
     pycsw-admin.py -c load_records -f pycsw/gisdata/gisdata.cfg -p `python -c 'import gisdata; print gisdata.GOOD_METADATA'` -r
     # setup web
     cp src/pycsw/csw.wsgi pycsw/
-    ln -s httpd.d/demo.pycsw.org /etc/apache2/sites-available/
+    sudo ln -s httpd.d/demo.pycsw.org /etc/apache2/sites-available/
     sudo /usr/sbin/apache2ctl graceful
