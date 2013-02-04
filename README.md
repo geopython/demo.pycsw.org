@@ -15,7 +15,7 @@ This is the setup for demo.pycsw.org
     python setup.py build
     python setup.py install
     # setup data
-    cp data/cite/records.db ../../pycsw/cite/
+    cp tests/suites/cite/data/records.db ../../pycsw/cite/
     cd ../..
     # update server.home, server.url and repository.database in pycsw/cite/cite.cfg
     # update server.home, server.url and repository.database in pycsw/gisdata/gisdata.cfg
