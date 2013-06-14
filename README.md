@@ -24,7 +24,7 @@ This is the setup for demo.pycsw.org
     pycsw-admin.py -c load_records -f pycsw/gisdata/gisdata.cfg -p `python -c 'import gisdata; print gisdata.GOOD_METADATA'` -r
     # setup services database
     pycsw-admin.py -c setup_db -f pycsw/services/services.cfg
-    # setup web
+    # setup www
     cp src/pycsw/csw.wsgi pycsw/
     sudo ln -s httpd.d/demo.pycsw.org /etc/apache2/sites-available/
     sudo /usr/sbin/apache2ctl graceful
@@ -35,4 +35,4 @@ This is the setup for demo.pycsw.org
     git submodule update
     cd ..
     # use local patch of GXP's catalogue widget
-    cp web/viewer/CatalogueSearchPanel.js web/gxp/src/script/widgets/
+    cp www/viewer/CatalogueSearchPanel.js www/gxp/src/script/widgets/
