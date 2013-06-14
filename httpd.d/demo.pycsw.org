@@ -29,5 +29,8 @@
   # gisdata
   WSGIScriptAlias /gisdata/csw /osgeo/demo.pycsw.org/pycsw/csw.wsgi
   SetEnvIf Request_URI "/gisdata/csw" PYCSW_CONFIG=/osgeo/demo.pycsw.org/pycsw/gisdata/gisdata.cfg
+  # services
+  WSGIScriptAlias /services/csw /osgeo/demo.pycsw.org/pycsw/csw.wsgi
+  SetEnvIf Request_URI "/services/csw" PYCSW_CONFIG=/osgeo/demo.pycsw.org/pycsw/services/services.cfg
 
 </VirtualHost>
