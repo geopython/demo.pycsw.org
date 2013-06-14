@@ -28,3 +28,11 @@ This is the setup for demo.pycsw.org
     cp src/pycsw/csw.wsgi pycsw/
     sudo ln -s httpd.d/demo.pycsw.org /etc/apache2/sites-available/
     sudo /usr/sbin/apache2ctl graceful
+    # setup viewer
+    git clone git@github.com:opengeo/gxp.git && cd $_
+    # setup GXP dependencies
+    git submodule init
+    git submodule update
+    cd ..
+    # use local patch of GXP's catalogue widget
+    cp web/viewer/CatalogueSearchPanel.js web/gxp/src/script/widgets/
