@@ -49,7 +49,8 @@
 
         <script type="text/javascript">
 
-            csw_url = "http://demo.pycsw.org/gisdata/csw";
+            var map = null;
+            csw_url = "http://demo.pycsw.org/services/csw";
 
             function escapeElementName(str) {
                 return str.replace(':', '\\:').replace('.', '\\.');
@@ -66,105 +67,109 @@
                     polygonPoints = [p1, p2, p3, p4];
                 return new L.Polygon(polygonPoints);
             }
-            $(document).ready(function(){
-                // init the map
-                polygon_layer = null;
-                var map = L.map('div-map').setView([10, 0], 1);
-                L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(map);
-                // init the results table
-                $("#table-csw-results").dataTable({
-                    fnDrawCallback: function() {
-                        $("#selector thead").remove();
+            function bbox_enabled2() {
+                alert(typeof map);
+                alert(typeof map === 'undefined');
+                return $('#input-bbox').is(':checked') && typeof map === "undefined";
+            }
+            function search() {
+                var freetext = $('#input-anytext').val().trim();
+                var bbox_enabled = $('#input-bbox').is(':checked');
+                var sortby = $('#select-sortby option:selected').val();
+
+                if (bbox_enabled && map != null) {
+                    bounds = map.getBounds();
+                    qbbox = '<ogc:BBOX><ogc:PropertyName>ows:BoundingBox</ogc:PropertyName><gml:Envelope xmlns:gml="http://www.opengis.net/gml"><gml:lowerCorner>' + bounds.getSouth() + ' ' + bounds.getWest() + '</gml:lowerCorner><gml:upperCorner>' + bounds.getNorth() + ' ' + bounds.getEast() + '</gml:upperCorner></gml:Envelope></ogc:BBOX>';
+                }
+
+                data = '<csw:GetRecords maxRecords="50" startPosition="1" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:ogc="http://www.opengis.net/ogc" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName>';
+                if (freetext != '') {
+                    if (bbox_enabled && map != null) {
+                        data += '<csw:Constraint version="1.1.0"><ogc:Filter><ogc:And><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>csw:AnyText</ogc:PropertyName><ogc:Literal>%' + $("#input-anytext").val().trim() + '%</ogc:Literal></ogc:PropertyIsLike>' + qbbox + '</ogc:And></ogc:Filter></csw:Constraint>';
                     }
-                });
-                // init the type select box
+                    else {
+                        data += '<csw:Constraint version="1.1.0"><ogc:Filter><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>csw:AnyText</ogc:PropertyName><ogc:Literal>%' + $("#input-anytext").val().trim() + '%</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></csw:Constraint>';
+                    }
+                }
+                else if (bbox_enabled && map != null) {
+                    data += '<csw:Constraint version="1.1.0"><ogc:Filter>' + qbbox + '</ogc:Filter></csw:Constraint>';
+                }
+  
+                data += '</csw:Query></csw:GetRecords>';
+
                 $.ajax({
                     type: "post",
                     url: csw_url,
                     contentType: "text/xml",
-                    data: '<GetDomain service="CSW" version="2.0.2" xmlns="http://www.opengis.net/cat/csw/2.0.2" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><PropertyName>dc:type</PropertyName></GetDomain>',
+                    data: data,
                     dataType: "text",
                     success: function(xml) {
-                        $(escapeElementName('csw:Value'),xml).each(function(record) {
-                            alert($(this).text());
-                        });
+                        $("#table-csw-results").dataTable().fnClearTable();
+                        //alert(xml);
+                        $(escapeElementName('csw:Record'),xml).each(function(record) {
+                            var snippet = "";
+                            var links = "";
+
+                            var title = $(this).find(escapeElementName('dc:title')).text();
+                            var publisher = $(this).find(escapeElementName('dc:publisher')).text();
+                            var identifier = $(this).find(escapeElementName('dc:identifier')).text();
+                            var abstract = $(this).find(escapeElementName('dct:abstract')).text();
+                            var source = $(this).find(escapeElementName('dc:source')).text();
+                            var rectype = $(this).find(escapeElementName('dc:type')).text();
+                            var thumb = $(this).find(escapeElementName('dct:references')+'[scheme="WWW:LINK-1.0-http--image-thumbnail"]').text();
+                            var bbox = $(this).find(escapeElementName('ows:BoundingBox')).text();
+                            var ll = $(this).find(escapeElementName('ows:LowerCorner')).text().split(' ');
+                            var ur = $(this).find(escapeElementName('ows:UpperCorner')).text().split(' ');
+                            var bbox = ll.concat(ur).join();
+
+                            // get all links
+                            $(this).find(escapeElementName('dct:references')).each(function() {
+                                var value = $(this).text();
+                                var scheme = $(this).attr('scheme');
+                                if (value != "None" && value.lastIndexOf("http", 0) === 0) {
+                                    links += ' <a title="' + scheme + '" href="' + value + '">link</a> '; 
+                                    if (scheme == 'OGC:WMS-1.1.1-http-get-map') {
+                                        urlbase = value.split('?')[0];
+                                        links += '<a href="' + urlbase + '">Add to map</a>';
+                                    }
+                                }
+                            });
+
+                            url = csw_url + "?service=CSW&version=2.0.2&request=GetRecordById&elementsetname=full&id=" + identifier;
+                            title2 = '<a id="' + bbox + '" class="a-record" target="_blank" title="' + title + '" href="' + url  + '">' + title + '</a>';
+                            snippet += '<h5>' + title2 + '</h5>';
+                            snippet += '<i>' + publisher + '</i>';
+                            snippet += links;
+
+                            $("#table-csw-results").dataTable().fnAddData([snippet]);
+                        })
                     }
                 });
-
+            }
+            $(document).ready(function(){
+                // init the map
+                polygon_layer = null;
+                map = L.map('div-map').setView([10, 0], 1);
+                basemap = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                })
+                map.addLayer(basemap);
+                L.control.layers({"basemap": basemap}).addTo(map);
+                // init the results table
+                $("#table-csw-results").dataTable({
+                    "aoColumns": [{"bSortable": false}],
+                    "bFilter": false,
+                    "bLengthChange": false,
+                    fnDrawCallback: function() {
+                        $("#selector thead").remove();
+                    }
+                });
+                // init CSW results
+                search();
                 // handle CSW searches
                 $("#form-search").keypress(function (e) {
                     if (e.keyCode == 13) { // Enter key pressed, but not submitting the form to a page refresh
-                        var freetext = $('#input-anytext').val().trim();
-                        var bbox_enabled = $('#input-bbox').is(':checked');
-                        var sortby = $('#select-sortby option:selected').val();
-
-                        if (bbox_enabled) {
-                            bounds = map.getBounds();
-                            qbbox = '<ogc:BBOX><ogc:PropertyName>ows:BoundingBox</ogc:PropertyName><gml:Envelope xmlns:gml="http://www.opengis.net/gml"><gml:lowerCorner>' + bounds.getSouth() + ' ' + bounds.getWest() + '</gml:lowerCorner><gml:upperCorner>' + bounds.getNorth() + ' ' + bounds.getEast() + '</gml:upperCorner></gml:Envelope></ogc:BBOX>';
-                        }
-
-                        data = '<csw:GetRecords maxRecords="50" startPosition="1" outputFormat="application/xml" outputSchema="http://www.opengis.net/cat/csw/2.0.2" resultType="results" service="CSW" version="2.0.2" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd" xmlns:ogc="http://www.opengis.net/ogc" xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><csw:Query typeNames="csw:Record"><csw:ElementSetName>full</csw:ElementSetName>';
-                        if (freetext != '') {
-                            if (bbox_enabled) {
-                                data += '<csw:Constraint version="1.1.0"><ogc:Filter><ogc:And><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>csw:AnyText</ogc:PropertyName><ogc:Literal>%' + $("#input-anytext").val().trim() + '%</ogc:Literal></ogc:PropertyIsLike>' + qbbox + '</ogc:And></ogc:Filter></csw:Constraint>';
-                            }
-                            else {
-                                data += '<csw:Constraint version="1.1.0"><ogc:Filter><ogc:PropertyIsLike escapeChar="\\" singleChar="_" wildCard="%"><ogc:PropertyName>csw:AnyText</ogc:PropertyName><ogc:Literal>%' + $("#input-anytext").val().trim() + '%</ogc:Literal></ogc:PropertyIsLike></ogc:Filter></csw:Constraint>';
-                            }
-                        }
-                        else if (bbox_enabled) {
-                            data += '<csw:Constraint version="1.1.0"><ogc:Filter>' + qbbox + '</ogc:Filter></csw:Constraint>';
-                        }
-  
-                        data += '<ogc:SortBy><ogc:SortProperty><ogc:PropertyName>' + sortby  + '</ogc:PropertyName><ogc:SortOrder>ASC</ogc:SortOrder></ogc:SortProperty></ogc:SortBy>';
-
-                        data += '</csw:Query></csw:GetRecords>';
-
-                        $.ajax({
-                            type: "post",
-                            url: csw_url,
-                            contentType: "text/xml",
-                            data: data,
-                            dataType: "text",
-                            success: function(xml) {
-                                $("#table-csw-results").dataTable().fnClearTable();
-                                //alert(xml);
-                                $(escapeElementName('csw:Record'),xml).each(function(record) {
-                                    var snippet = "";
-                                    var links = "";
-
-                                    var title = $(this).find(escapeElementName('dc:title')).text();
-                                    var publisher = $(this).find(escapeElementName('dc:publisher')).text();
-                                    var identifier = $(this).find(escapeElementName('dc:identifier')).text();
-                                    var abstract = $(this).find(escapeElementName('dct:abstract')).text();
-                                    var source = $(this).find(escapeElementName('dc:source')).text();
-                                    var rectype = $(this).find(escapeElementName('dc:type')).text();
-                                    var thumb = $(this).find(escapeElementName('dct:references')+'[scheme="WWW:LINK-1.0-http--image-thumbnail"]').text();
-                                    var bbox = $(this).find(escapeElementName('ows:BoundingBox')).text();
-                                    var ll = $(this).find(escapeElementName('ows:LowerCorner')).text().split(' ');
-                                    var ur = $(this).find(escapeElementName('ows:UpperCorner')).text().split(' ');
-                                    var bbox = ll.concat(ur).join();
-
-                                    // get all links
-                                    $(this).find(escapeElementName('dct:references')).each(function() {
-                                        var value = $(this).text();
-                                        if (value != "None" && value.lastIndexOf("http", 0) === 0) {
-                                            links += ' <a title="' + $(this).attr('scheme')  + '" href="' + value + '">link</a> '; 
-                                        }
-                                    });
-
-                                    url = csw_url + "?service=CSW&version=2.0.2&request=GetRecordById&elementsetname=full&id=" + identifier;
-                                    title2 = '<a id="' + bbox + '" class="a-record" target="_blank" title="' + title + '" href="' + url  + '">' + title + '</a>';
-                                    snippet += '<h5>' + title2 + '</h5>';
-                                    snippet += '<i>' + publisher + '</i>';
-                                    snippet += links;
-
-                                    $("#table-csw-results").dataTable().fnAddData([snippet]);
-                                })
-                            }
-                        });
+                        search();
                         return false;
                     }
                 });
@@ -173,8 +178,10 @@
                     if (polygon_layer != null && map.hasLayer(polygon_layer)) {
                         map.removeLayer(polygon_layer);
                     }
-                    polygon_layer = bbox2polygon(bbox);
-                    map.addLayer(polygon_layer);
+                    if (bbox != undefined) {
+                        polygon_layer = bbox2polygon(bbox);
+                        map.addLayer(polygon_layer);
+                    }
                 });
             });
         </script>
@@ -185,24 +192,22 @@
         </header>
         <section>
             <div>
-                <div id="div-search">
-                    <form id="form-search">
-                        Type: <select id="select-type"></select>
-                        Search Terms: <input type="text" id="input-anytext"/>
-                        Enable bbox? <input type="checkbox" id="input-bbox"/>
-                        Sort by: <select id="select-sortby"><option value="dc:title">Title</option><option value="dc:date">Date</option></select>
-                    </form>
-                </div>
-                <div id="div-map"></div>
-                <div id="div-csw-results">
-                    <table id="table-csw-results">
-                        <thead>
-                            <tr>
-                                <th>Record</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+                <form id="form-search">
+                    <div id="div-bbox">Filter by location <input type="checkbox" id="input-bbox"/></div>
+                    <div id="div-map"></div>
+                    <div id="div-csw-results">
+                        <div id="div-search">
+                            Search Terms: <input type="text" id="input-anytext"/>
+                        </div>
+                        <table id="table-csw-results">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </form>
             </div>
         </section>
         <footer>
