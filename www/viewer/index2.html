@@ -24,7 +24,7 @@
             #div-csw-results {
                 float: right;
                 width: 500px;
-                height: 200px;
+                height: 300px;
                 overflow-y: auto;
             }
             footer {
@@ -42,10 +42,6 @@
 
         <!-- jQuery -->
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-        <!-- jQuery DataTables -->
-        <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css">
-        <script type="text/javascript" charset="utf-8" src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js"></script>
 
         <script type="text/javascript">
 
@@ -73,6 +69,8 @@
                 return $('#input-bbox').is(':checked') && typeof map === "undefined";
             }
             function search() {
+                $('#table-csw-results tbody > tr').remove();
+                $('#table-csw-results tbody').html("SEARCHING");
                 var freetext = $('#input-anytext').val().trim();
                 var bbox_enabled = $('#input-bbox').is(':checked');
                 var sortby = $('#select-sortby option:selected').val();
@@ -104,10 +102,10 @@
                     data: data,
                     dataType: "text",
                     success: function(xml) {
-                        $("#table-csw-results").dataTable().fnClearTable();
+                        $('#table-csw-results tbody').empty();
                         //alert(xml);
                         $(escapeElementName('csw:Record'),xml).each(function(record) {
-                            var snippet = "";
+                            var snippet = "<tr><td>";
                             var links = "";
 
                             var title = $(this).find(escapeElementName('dc:title')).text();
@@ -140,8 +138,9 @@
                             snippet += '<h5>' + title2 + '</h5>';
                             snippet += '<i>' + publisher + '</i>';
                             snippet += links;
+                            snippet += '</td></tr>';
 
-                            $("#table-csw-results").dataTable().fnAddData([snippet]);
+                            $("#table-csw-results tbody").append(snippet);
                         })
                     }
                 });
@@ -155,16 +154,7 @@
                 })
                 map.addLayer(basemap);
                 L.control.layers({"basemap": basemap}).addTo(map);
-                // init the results table
-                $("#table-csw-results").dataTable({
-                    "aoColumns": [{"bSortable": false}],
-                    "bFilter": false,
-                    "bLengthChange": false,
-                    fnDrawCallback: function() {
-                        $("#selector thead").remove();
-                    }
-                });
-                // init CSW results
+                // init the results table with CSW results
                 search();
                 // handle CSW searches
                 $("#form-search").keypress(function (e) {
@@ -205,6 +195,9 @@
                                     <th></th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                <tr><td>HHHHHHH</td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </form>
