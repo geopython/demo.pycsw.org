@@ -9,10 +9,22 @@
                 width: 400px;
                 height: 200px;
             }
-            #div-csw-results {
+            #div-csw-results, #div-csw-results-glass {
                 width: 500px;
                 height: 300px;
                 overflow-y: auto;
+            }
+            #div-csw-results-glass {
+                background-color: white;
+                //background-image: url('http://4gettv.com/wp-content/uploads/2011/10/Loading_video.gif');
+                filter:alpha(opacity=50); /* IE */
+                opacity: 0.5; /* Safari, Opera */
+                -moz-opacity:0.50; /* FireFox */
+                z-index: 20;
+                background-repeat:no-repeat;
+                background-position:center;
+                position:absolute;
+                display: none;
             }
             footer {
                 position: fixed;
@@ -55,8 +67,7 @@
                 return new L.Polygon(polygonPoints);
             }
             function search(startposition) {
-                $('#table-csw-results tr').remove();
-                $('#table-csw-results').html('Searching...');
+                $('#div-csw-results-glass').toggle();
 
                 if (!startposition) {
                     startposition = 1;
@@ -93,6 +104,7 @@
                     dataType: "text",
                     success: function(xml) {
                         $('#table-csw-results').empty();
+                        $('#div-csw-results-glass').toggle();
                         //alert(xml);
                         // derive results for paging
                         var matched = parseInt($(xml).find(escapeElementName('csw:SearchResults')).attr('numberOfRecordsMatched'));
@@ -238,10 +250,11 @@
                         <div class="col-lg-4" id="div-map"></div>
                         <div class="col-lg-4">
                             <div class="row">
+                                <div id="div-csw-results-glass"></div>
                                 <div class="col-lg-12" id="div-csw-results">
                                     <table class="table table-bordered table-striped" id="table-csw-results">
                                         <tr>
-                                            <td>results</td>
+                                            <td></td>
                                         </tr>
                                     </table>
                                 </div>
