@@ -54,11 +54,6 @@
                     polygonPoints = [p1, p2, p3, p4];
                 return new L.Polygon(polygonPoints);
             }
-            function bbox_enabled2() {
-                alert(typeof map);
-                alert(typeof map === 'undefined');
-                return $('#input-bbox').is(':checked') && typeof map === "undefined";
-            }
             function search(startposition) {
                 $('#table-csw-results tr').remove();
                 $('#table-csw-results').html('Searching...');
@@ -113,8 +108,18 @@
                             $('#table-csw-results').html('<tr><td>No results</td></tr>');
                             return;
                         }
-                        if (nextrecord >= matched) {
+                        if (nextrecord == 0 || nextrecord >= matched) { // at the end
+                            $('#li-next').attr('class', 'disabled');
                             nextrecord = matched;
+                        }
+                        else {
+                            $('#li-next').attr('class', 'active');
+                        }
+                        if (startposition == 1) {
+                            $('#li-previous').attr('class', 'disabled');
+                        }
+                        else {
+                            $('#li-previous').attr('class', 'active');
                         }
 
                         results = 'Results ' + startposition + '-' + nextrecord + ' of ' + matched + ' record(s)';
@@ -220,38 +225,40 @@
             <h1>pycsw viewer</h1>
         </header>
         <section>
-            <form id="form-search">
-                <input type="hidden" id="input-startposition"/>
-                <input type="hidden" id="input-matched"/>
-                <input type="hidden" id="input-nextrecord"/>
-                <div class="row">
-                    <div class="col-lg-4" id="div-bbox">Filter by location <input type="checkbox" id="input-bbox"/></div>
-                    <div class="col-lg-4 pull-left" id="div-search"><input class="form-control input-medium" type="text" id="input-anytext" placeholder="Search Terms"/></div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-4" id="div-map"></div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12" id="div-csw-results">
-                                <table class="table table-bordered table-striped" id="table-csw-results">
-                                    <tr>
-                                        <td>results</td>
-                                    </tr>
-                                </table>
-                            </div>
+            <div class="panel">
+                <form id="form-search">
+                    <input type="hidden" id="input-startposition"/>
+                    <input type="hidden" id="input-matched"/>
+                    <input type="hidden" id="input-nextrecord"/>
+                    <div class="row">
+                        <div class="col-lg-4" id="div-bbox">Filter by location <input type="checkbox" id="input-bbox"/></div>
+                        <div class="col-lg-4 pull-left" id="div-search"><input class="form-control input-medium" type="text" id="input-anytext" placeholder="Search Terms"/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4" id="div-map"></div>
+                        <div class="col-lg-4">
                             <div class="row">
-                                <div class="col-lg-12 text-center">
-                                    <div id="div-results"></div>
-                                    <ul class="pager">
-                                        <li><a id="a-previous" title="Previous" href="#">Previous</a></li>
-                                        <li><a id="a-next" title="Next" href="#">Next</a></li>
-                                    </ul>
+                                <div class="col-lg-12" id="div-csw-results">
+                                    <table class="table table-bordered table-striped" id="table-csw-results">
+                                        <tr>
+                                            <td>results</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                        <div id="div-results"></div>
+                                        <ul class="pager">
+                                            <li id="li-previous"><a id="a-previous" title="Previous" href="#">Previous</a></li>
+                                            <li id="li-next"><a id="a-next" title="Next" href="#">Next</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </section>
         <footer>
         <hr>
