@@ -131,7 +131,7 @@
                             $('#li-previous').attr('class', 'active');
                         }
 
-                        results = 'Results ' + startposition + '-' + nextrecord + ' of ' + matched + ' record(s)';
+                        results = '<strong>Results ' + startposition + '-' + nextrecord + ' of ' + matched + ' record(s)</strong>';
 
                         $('#div-results').html(results);
 
@@ -148,6 +148,7 @@
                                 abstract2 = abstract.substring(0,255) + '...';
                             }
                             var source = $(this).find(escapeElementName('dc:source')).text();
+                            var date = $(this).find(escapeElementName('dc:date')).text();
                             var rectype = $(this).find(escapeElementName('dc:type')).text();
                             var thumb = $(this).find(escapeElementName('dct:references')+'[scheme="WWW:LINK-1.0-http--image-thumbnail"]').text();
                             var bbox = $(this).find(escapeElementName('ows:BoundingBox')).text();
@@ -173,6 +174,7 @@
                             snippet += '<h5>' + title2 + '</h5>';
                             snippet += '<h5>' + abstract2 + '</h5>';
                             snippet += '<em>' + publisher + '</em>';
+                            snippet += '<small><strong>Date</strong>: ' + date + '</small>';
                             snippet += links;
                             snippet += '</td></tr>';
 
@@ -240,7 +242,7 @@
                     <input type="hidden" id="input-matched"/>
                     <input type="hidden" id="input-nextrecord"/>
                     <div class="row">
-                        <div class="col-lg-4" id="div-bbox">Filter by location <input type="checkbox" id="input-bbox"/></div>
+                        <div class="col-lg-4" id="div-bbox"><strong>Filter by location</strong> <input type="checkbox" id="input-bbox"/></div>
                         <div class="col-lg-4 pull-left" id="div-search"><input class="form-control input-medium" type="text" id="input-anytext" placeholder="Search Terms"/></div>
                     </div>
                     <div class="row">
