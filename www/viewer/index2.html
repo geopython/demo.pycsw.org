@@ -47,8 +47,55 @@
         <script type="text/javascript">
 
             var map = null;
-            var csw_url = "http://demo.pycsw.org/gisdata/csw";
+            var csw_url = "http://demo.pycsw.org/services/csw";
             var pagesize = 10;
+
+            function BoundingBox(xml) {
+                var ll = $(xml).find(escapeElementName('ows:LowerCorner')).text().split(' ');
+                var ur = $(xml).find(escapeElementName('ows:UpperCorner')).text().split(' ');
+                this.minx = ll[1];
+                this.miny = ll[0];
+                this.maxx = ur[1];
+                this.maxy = ur[0];
+                this.csv = [ll[0], ll[1], ur[0], ur[1]].join();
+            }
+
+            function Link(xml) {
+                this.value = $(xml).text();
+                this.scheme = null;
+                var scheme = $(xml).attr('scheme');
+                if (scheme != 'None') {
+                    this.scheme = scheme;
+                }
+            }
+
+            function CswRecord(xml) {
+                this.identifier = $(xml).find(escapeElementName('dc:identifier')).text();
+                this.type = $(xml).find(escapeElementName('dc:type')).text();
+                this.title = $(xml).find(escapeElementName('dc:title')).text();
+                this.abstract = $(xml).find(escapeElementName('dct:abstract')).text();
+                this.publisher = $(xml).find(escapeElementName('dc:publisher')).text();
+                this.abstract2 = $(xml).find(escapeElementName('dct:abstract')).text();
+                this.source = $(xml).find(escapeElementName('dc:source')).text();
+                this.date = $(xml).find(escapeElementName('dc:date')).text();
+                this.modified = $(xml).find(escapeElementName('dct:modified')).text();
+                this.references = [];
+                this.bbox = new BoundingBox($(xml).find(escapeElementName('ows:BoundingBox')));
+
+                var self = this;
+
+                // get all links
+                $(xml).find(escapeElementName('dct:references')).each(function() {
+                    self.references.push(new Link($(this)));
+                });
+            }
+
+            function truncate(value, length) {
+                if (value.length > length) {
+                    return value.substring(0, length) + '...';
+                }
+                return value;
+            }
 
             function escapeElementName(str) {
                 return str.replace(':', '\\:').replace('.', '\\.');
@@ -139,44 +186,26 @@
 
                         $(escapeElementName('csw:Record'),xml).each(function(record) {
                             var snippet = "<tr><td>";
+                            var rec = new CswRecord($(this));
                             var links = "";
 
-                            var title = $(this).find(escapeElementName('dc:title')).text();
-                            var publisher = $(this).find(escapeElementName('dc:publisher')).text();
-                            var identifier = $(this).find(escapeElementName('dc:identifier')).text();
-                            var abstract = $(this).find(escapeElementName('dct:abstract')).text();
-                            var abstract2 = abstract;
-                            if (abstract.length > 255) {
-                                abstract2 = abstract.substring(0,255) + '...';
-                            }
-                            var source = $(this).find(escapeElementName('dc:source')).text();
-                            var date = $(this).find(escapeElementName('dc:date')).text();
-                            var rectype = $(this).find(escapeElementName('dc:type')).text();
-                            var thumb = $(this).find(escapeElementName('dct:references')+'[scheme="WWW:LINK-1.0-http--image-thumbnail"]').text();
-                            var bbox = $(this).find(escapeElementName('ows:BoundingBox')).text();
-                            var ll = $(this).find(escapeElementName('ows:LowerCorner')).text().split(' ');
-                            var ur = $(this).find(escapeElementName('ows:UpperCorner')).text().split(' ');
-                            var bbox = ll.concat(ur).join();
-
                             // get all links
-                            $(this).find(escapeElementName('dct:references')).each(function() {
-                                var value = $(this).text();
-                                var scheme = $(this).attr('scheme');
-                                if (value != "None" && value.lastIndexOf("http", 0) === 0) {
-                                    links += ' <a class="btn btn-primary btn-sm" title="' + scheme + '" href="' + value + '">link</a> '; 
-                                    if (scheme == 'OGC:WMS-1.1.1-http-get-map') {
-                                        urlbase = value.split('?')[0];
+                            for (var i = 0; i < rec.references.length; i++) {
+                                if (rec.references[i].value != "None" && rec.references[i].value.lastIndexOf("http", 0) === 0) {
+                                    links += ' <a class="btn btn-primary btn-sm" title="' + rec.references[i].scheme + '" href="' + rec.references[i].value + '">link</a> '; 
+                                    if (rec.references[i].scheme == 'OGC:WMS-1.1.1-http-get-map') {
+                                        urlbase = rec.references[i].value.split('?')[0];
                                         links += '<a class="btn btn-primary btn-sm" href="' + urlbase + '">Add to map</a>';
                                     }
                                 }
-                            });
+                            }
 
-                            url = csw_url + "?service=CSW&version=2.0.2&request=GetRecordById&elementsetname=full&id=" + identifier;
-                            title2 = '<a id="' + bbox + '" class="a-record" target="_blank" title="' + title + '" href="' + url  + '">' + title + '</a>';
+                            url = csw_url + "?service=CSW&version=2.0.2&request=GetRecordById&elementsetname=full&id=" + rec.identifier;
+                            title2 = '<a id="' + rec.bbox.csv + '" class="a-record" target="_blank" title="' + rec.title + '" href="' + url  + '">' + rec.title + '</a>';
                             snippet += '<h5>' + title2 + '</h5>';
-                            snippet += '<h5>' + abstract2 + '</h5>';
-                            snippet += '<em>' + publisher + '</em>';
-                            snippet += '<small><strong>Date</strong>: ' + date + '</small>';
+                            snippet += '<h5>' + truncate(rec.abstract, 255) + '</h5>';
+                            snippet += '<em>' + rec.publisher + '</em><br/>';
+                            snippet += '<small><strong>Date</strong>: ' + rec.date + '</small><br/>';
                             snippet += links;
                             snippet += '</td></tr>';
 
