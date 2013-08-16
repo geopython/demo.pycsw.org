@@ -34,9 +34,9 @@
             }
         </style>
         <!-- leaflet -->
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.3/leaflet.css" />
-        <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.3/leaflet.ie.css" /><![endif]-->
-        <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.6.3/leaflet.js"></script>
+        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" /><![endif]-->
+        <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
 
         <!-- jQuery -->
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -317,6 +317,13 @@
                             var layer_name = kvp[1];
                         }
                     }
+
+                    for (var prop in map_layers_control._layers) {
+                        if (url == map_layers_control._layers[prop].layer._url && tokens[1] == map_layers_control._layers[prop].name) {
+                            return;
+                        }
+                    }
+
                     var layer = L.tileLayer.wms(url, {
                         layers: layer_name,
                         format: 'image/png',
