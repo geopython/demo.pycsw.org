@@ -1,7 +1,7 @@
 demo.pycsw.org
 ==============
 
-This is the setup for demo.pycsw.org
+This is the setup for http://demo.pycsw.org
 
     # virtualenv /path/to/dir
     # source /path/to/dir/bin/activate
