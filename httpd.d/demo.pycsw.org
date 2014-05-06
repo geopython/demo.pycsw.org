@@ -1,7 +1,7 @@
 
 
 <VirtualHost *:80>
-  ServerAdmin tomkralidis@hotmail.com
+  ServerAdmin tomkralidis@gmail.com
   ServerName demo.pycsw.org
   DocumentRoot /osgeo/demo.pycsw.org/www
   DirectoryIndex index.html
