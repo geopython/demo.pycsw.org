@@ -6,8 +6,8 @@
   DocumentRoot /osgeo/demo.pycsw.org/www
   DirectoryIndex index.html
 
-  ErrorLog /var/log/apache2/demo.pycsw.org-error_log
-  CustomLog /var/log/apache2/demo.pycsw.org-access_log combined
+  ErrorLog /var/log/apache2/demo.pycsw.org-error.log
+  CustomLog /var/log/apache2/demo.pycsw.org-access.log combined
 
   <Location /pycsw/>
     Options FollowSymLinks +ExecCGI
