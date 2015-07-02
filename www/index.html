@@ -16,6 +16,28 @@
             header {
                 display: inline-block;
             }
+            table {
+                border-width: 2px;
+                border-spacing: 0px;
+                border-style: solid;
+                border-color: black;
+                border-collapse: collapse;
+                background-color: white;
+            }
+                table th {
+                border-width: 4px;
+                padding: 5px;
+                border-style: solid;
+                border-color: gray;
+                background-color: white;
+            }
+                table td {
+                border-width: 4px;
+                padding: 5px;
+                border-style: solid;
+                border-color: gray;
+                background-color: white;
+            }
             .header-img {
                 float: left;
                 margin: 0px 15px 15px 0px;
@@ -35,24 +57,37 @@
             <a title="Latest release" href="http://pycsw.org/download"><img src="https://img.shields.io/pypi/v/pycsw.svg" alt="Latest release" title="Latest release"/></a>
             <a title="License" href="http://pycsw.org"><img src="https://img.shields.io/github/license/geopython/pycsw.svg" alt="License" title="License"/></a>
         </section>
-        <section>
+        <section id="demos">
             <h2>Demonstrations</h2>
-                <ul>
-                    <li><a title="OGC CITE" href="/cite/csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities">OGC CITE</a> used for OGC <a title="CITE" href="http://cite.opengeospatial.org">CITE testing</a>.  This is pycsw's official <a title="OGC Reference Implementation" href="http://www.opengeospatial.org/resource/products/details/?pid=1104">OGC Reference Implementation</a>.</li>
-                    <li><a title="gisdata" href="/gisdata/csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities">gisdata</a> demo of <a title="gisdata" href="http://github.com/GeoNode/gisdata">gisdata</a> GitHub repository</li>
-                    <li><a title="services" href="/services/csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities">services</a> demo of harvested OGC Web Services (contact <a title="pycsw" href="http://pycsw.org/community.html">pycsw</a> to have your service added)</li>
-                    <li><a title="viewer" href="viewer/index.html">viewer</a> jQuery / Leaflet based CSW viewer</li>
-                </ul>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>URL</th>
+                </tr>
+                <tr>
+                    <td>OGC CITE</td>
+                    <td>used for OGC <a title="CITE" href="http://cite.opengeospatial.org">CITE testing</a>.  This is pycsw's official <a title="OGC Reference Implementation" href="http://www.opengeospatial.org/resource/products/details/?pid=1104">OGC Reference Implementation</a></td>
+                    <td><a title="CSW 2.0.2" href="/cite/csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities">CSW 2.0.2</a> <a title="CSW 2.0.2" href="/cite/csw?service=CSW&amp;version=3.0.0&amp;request=GetCapabilities">CSW 3.0.0</a></td>
+                </tr>
+                <tr>
+                    <td>gisdata</td>
+                    <td>demo of <a title="gisdata" href="http://github.com/GeoNode/gisdata">gisdata</a> GitHub repository</td>
+                    <td><a title="CSW 2.0.2" href="/gisdata/csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities">CSW 2.0.2</a> <a title="CSW 2.0.2" href="/gisdata/csw?service=CSW&amp;version=3.0.0&amp;request=GetCapabilities">CSW 3.0.0</a></td>
+                </tr>
+                <tr>
+                    <td>services</td>
+                    <td>demo of harvested OGC Web Services (contact <a title="pycsw" href="http://pycsw.org/community.html">pycsw</a> to have your service added)</td>
+                    <td><a title="CSW 2.0.2" href="/services/csw?service=CSW&amp;version=2.0.2&amp;request=GetCapabilities">CSW 2.0.2</a> <a title="CSW 2.0.2" href="/services/csw?service=CSW&amp;version=3.0.0&amp;request=GetCapabilities">CSW 3.0.0</a></td>
+                </tr>
+                <tr>
+                    <td>viewer</td>
+                    <td>jQuery / Leaflet based CSW viewer</td>
+                    <td><a title="viewer" href="/viewer">viewer</a></td>
+                </tr>
+            </table>
         </section>
-<!--
-        <section>
-            <h3>Code Activity</h3>
-            <script src="http://gitlive.com/githublive.min.js"></script>
-            <script>var GithubPush = {num_old:8,nodes:['geopython/pycsw']}</script>
-            <div id="commits"></div>
-            <hr/>
-        </section>
--->
+        <hr>
         <footer>
             <a href="http://validator.w3.org/check?verbose=1&amp;uri=referer" title="Valid HTML 5!"><img class="flat" src="http://www.w3.org/html/logo/downloads/HTML5_Badge_32.png" alt="Valid HTML 5!" height="32" width="32"/></a>
             <a href="http://jigsaw.w3.org/css-validator/check/referer" title="Valid CSS!"><img class="flat" src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="Valid CSS!" height="31" width="88"/></a>

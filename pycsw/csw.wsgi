@@ -96,7 +96,7 @@ def application(env, start_response):
     else:
         gzip_compresslevel = 0
 
-    contents = csw.dispatch_wsgi()
+    status, contents = csw.dispatch_wsgi()
 
     headers = {}
 
@@ -116,7 +116,6 @@ def application(env, start_response):
     headers['Content-Length'] = str(len(contents))
     headers['Content-Type'] = csw.contenttype
 
-    status = '200 OK'
     start_response(status, headers.items())
 
     return [contents]
