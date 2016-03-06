@@ -1,5 +1,3 @@
-
-
 <VirtualHost *:80>
   ServerAdmin tomkralidis@gmail.com
   ServerName demo.pycsw.org
@@ -17,12 +15,12 @@
     AddHandler cgi-script .py
   </Location>
 
-  WSGIDaemonProcess pycsw user=www-data group=www-data threads=1 processes=5 python-path=/osgeo/demo.pycsw.org/lib/python2.6/site-packages/
+  WSGIDaemonProcess pycsw user=www-data group=www-data threads=1 processes=5 python-path=/osgeo/demo.pycsw.org/lib/python2.7/site-packages/
   WSGIProcessGroup pycsw
   WSGIPassAuthorization On
   WSGIApplicationGroup %{GLOBAL}
 
-  SetEnv PYTHONPATH /osgeo/demo.pycsw.org/lib/python2.6/site-packages/
+  SetEnv PYTHONPATH /osgeo/demo.pycsw.org/lib/python2.7/site-packages/
 
   # pycsw configurations
   # CITE
@@ -34,5 +32,4 @@
   # services
   WSGIScriptAlias /services/csw /osgeo/demo.pycsw.org/pycsw/csw.wsgi
   SetEnvIf Request_URI "/services/csw" PYCSW_CONFIG=/osgeo/demo.pycsw.org/pycsw/services/services.cfg
-
 </VirtualHost>
