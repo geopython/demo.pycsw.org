@@ -114,9 +114,8 @@ def application(env, start_response):
         headers['Content-Encoding'] = 'gzip'
 
     headers['Content-Length'] = str(len(contents))
-    headers['Content-Type'] = csw.contenttype
-
-    start_response(status, headers.items())
+    headers['Content-Type'] = str(csw.contenttype)
+    start_response(status, list(headers.items()))
 
     return [contents]
 
