@@ -274,7 +274,7 @@
                 // init the map
                 polygon_layer = null;
                 map = L.map('div-map').setView([10, 0], 1);
-                basemap = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                basemap = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 })
                 map.addLayer(basemap);
