@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./www:/www:ro
+    ports:
+      - 80:80
+
+  pycsw:
+    container_name: demo-pycsw-org-cite
+    image: geopython/pycsw:latest
+    volumes:
+      - ./pycsw/cite/cite.cfg:/etc/pycsw/pycsw.cfg:ro
+    environment:
+     - SCRIPT_NAME=/cite/csw

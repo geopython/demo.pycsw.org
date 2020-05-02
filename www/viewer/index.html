@@ -34,21 +34,20 @@
             }
         </style>
         <!-- leaflet -->
-        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
-        <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.ie.css" /><![endif]-->
-        <script type="text/javascript" src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+        <script type="text/javascript" src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 
         <!-- jQuery -->
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
 
         <!-- Bootstrap -->
-        <link rel="stylesheet" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+        <link rel="stylesheet" media="screen" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
         <script type="text/javascript">
 
             var map = null;
             var map_layers_control = null;
-            var csw_url = "http://demo.pycsw.org/services/csw";
+            var csw_url = "https://apps.ecmwf.int/csw/";
             var pagesize = 10;
 
             var protocols = {
@@ -86,6 +85,7 @@
                 "OGC:WPS": ["OGC-WPS Web Processing Service", "WPS"],
                 "WWW:DOWNLOAD-1.0-ftp--download": ["File for download through FTP", "FTP"],
                 "WWW:DOWNLOAD-1.0-http--download": ["File for download", "HTTP"],
+                "WWW:DOWNLOAD": ["File for download", "HTTP"],
                 "FILE:GEO": ["GIS file", "GIS"],
                 "FILE:RASTER": ["GIS RASTER file", "Raster"],
                 "WWW:LINK-1.0-http--ical": ["iCalendar (URL)", "iCal"],
@@ -166,11 +166,12 @@
             }
 
             function style_record(rec) {
-                var snippet = "<tr><td>";
+                var snippet = '<tr><th scope="row">';
                 var links = "";
                 // get all links
                 for (var i = 0; i < rec.references.length; i++) {
                     if (rec.references[i].value != "None" && rec.references[i].value.lastIndexOf("http", 0) === 0) {
+			console.log(rec.references[i]);
                         if (rec.references[i].scheme == 'OGC:WMS-1.1.1-http-get-map') {
                             urlbase = rec.references[i].value.split('?')[0];
                             links += '<span id="' + rec.references[i].value + '##' + rec.title + '" class="btn btn-primary btn-sm">Add to map</span>';
@@ -188,7 +189,7 @@
                 snippet += '<em>' + rec.publisher + '</em><br/>';
                 snippet += '<small><strong>Date</strong>: ' + rec.date + '</small><br/>';
                 snippet += links;
-                snippet += '</td></tr>';
+                snippet += '</th></tr>';
                 return snippet;
             }
             function search(startposition) {
@@ -222,8 +223,9 @@
                 data += '</csw:Query></csw:GetRecords>';
 
                 $.ajax({
-                    type: "post",
+                    type: "POST",
                     url: csw_url,
+                    withCredentials: false,
                     //contentType: "text/xml",
                     data: data,
                     dataType: "text",
@@ -275,7 +277,7 @@
                 polygon_layer = null;
                 map = L.map('div-map').setView([10, 0], 1);
                 basemap = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 })
                 map.addLayer(basemap);
                 map_layers_control = L.control.layers({"basemap": basemap}, {}, {'collapsed': true}).addTo(map);
@@ -363,23 +365,33 @@
                         <div class="col-sm-4 pull-left" id="div-search"><input class="form-control input-medium" type="text" id="input-anytext" placeholder="Search Terms"/></div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-4 pull-left" id="div-csw-url"><input class="form-control input-medium" type="text" id="input-csw-url" placeholder="https://apps.ecmwf.int/csw/" value="https://apps.ecmwf.int/csw/"/></div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-4" id="div-map"></div>
                         <div class="col-sm-4">
                             <div class="row">
                                 <div id="div-csw-results-glass"></div>
                                 <div class="col-sm-12" id="div-csw-results">
                                     <table class="table table-bordered table-striped" id="table-csw-results">
-                                        <tr>
-                                            <td></td>
-                                        </tr>
+                                        <thead>
+                                            <tr>
+                                                <td></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
                                     </table>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-12 text-center">
+                                    <div class="col-sm-12 text-center container">
                                         <div id="div-results"></div>
-                                        <ul class="pager">
-                                            <li id="li-previous"><a id="a-previous" title="Previous" href="#">Previous</a></li>
-                                            <li id="li-next"><a id="a-next" title="Next" href="#">Next</a></li>
+                                        <ul class="pagination">
+                                            <li id="li-previous" class="page-item"><a class="page-link" id="a-previous" title="Previous" href="#">Previous</a></li>
+                                            <li id="li-next" class="page-item"><a class="page-link" id="a-next" title="Next" href="#">Next</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -391,8 +403,8 @@
         </section>
         <footer>
         <hr>
-            <a href="http://validator.w3.org/check?verbose=1&amp;uri=referer" title="Valid HTML 5!"><img src="http://www.w3.org/html/logo/downloads/HTML5_Badge_32.png" alt="Valid HTML 5!" height="32" width="32"/></a>
-            <a href="http://jigsaw.w3.org/css-validator/check/referer" title="Valid CSS!"><img src="http://jigsaw.w3.org/css-validator/images/vcss-blue" alt="Valid CSS!" height="31" width="88"/></a>
+            <a href="https://validator.w3.org/check?verbose=1&amp;uri=referer" title="Valid HTML 5!"><img src="https://www.w3.org/html/logo/downloads/HTML5_Badge_32.png" alt="Valid HTML 5!" height="32" width="32"/></a>
+            <a href="https://jigsaw.w3.org/css-validator/check/referer" title="Valid CSS!"><img src="https://jigsaw.w3.org/css-validator/images/vcss-blue" alt="Valid CSS!" height="31" width="88"/></a>
         </footer>
     </body>
 </html>
