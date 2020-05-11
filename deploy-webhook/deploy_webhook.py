@@ -65,7 +65,7 @@ def application(environ, start_response):
 
     # read in request
     length = int(environ.get('CONTENT_LENGTH', '0'))
-    secret_key = environ.get('DEMO_PYWPS_ORG_SECRET_KEY')
+    secret_key = environ.get('DEMO_PYCSW_ORG_SECRET_KEY')
     signature = environ.get('HTTP_X_HUB_SIGNATURE', None)
     payload = environ['wsgi.input'].read(length)
 
