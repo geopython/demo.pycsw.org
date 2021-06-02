@@ -25,7 +25,7 @@ services:
     volumes:
       - ./pycsw/cite/cite.cfg:/etc/pycsw/pycsw.cfg:ro
     environment:
-     - SCRIPT_NAME=/cite/csw
+     - SCRIPT_NAME=/cite
 
   pycsw-gisdata:
     container_name: demo-pycsw-org-gisdata
@@ -34,4 +34,4 @@ services:
       - ./pycsw/gisdata/gisdata.cfg:/etc/pycsw/pycsw.cfg:ro
       - ./pycsw/gisdata/gisdata.db:/home/pycsw/gisdata/gisdata.db:ro
     environment:
-     - SCRIPT_NAME=/gisdata/csw
+     - SCRIPT_NAME=/gisdata
