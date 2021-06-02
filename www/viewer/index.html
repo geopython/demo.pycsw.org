@@ -47,7 +47,7 @@
 
             var map = null;
             var map_layers_control = null;
-            var csw_url = "https://apps.ecmwf.int/csw/";
+            var csw_url = $('#input-csw-url').val();
             var pagesize = 10;
 
             var protocols = {
@@ -177,7 +177,9 @@
                             links += '<span id="' + rec.references[i].value + '##' + rec.title + '" class="btn btn-primary btn-sm">Add to map</span>';
                         }
                         else {
-                            links += ' <a class="btn btn-primary btn-sm" title="' + rec.references[i].scheme + '" href="' + rec.references[i].value + '">' + protocols[rec.references[i].scheme][1] + '</a> ';
+                            if (rec.references[i].scheme in protocols) {
+                                links += ' <a class="btn btn-primary btn-sm" title="' + rec.references[i].scheme + '" href="' + rec.references[i].value + '">' + protocols[rec.references[i].scheme][1] + '</a> ';
+                            }
                         }
                     }
                 }
@@ -224,8 +226,10 @@
 
                 $.ajax({
                     type: "POST",
-                    url: csw_url,
+                    url: $('#input-csw-url').val(),
                     withCredentials: false,
+                    //crossDomain: true,
+                    dataType: 'jsonp',
                     //contentType: "text/xml",
                     data: data,
                     dataType: "text",
