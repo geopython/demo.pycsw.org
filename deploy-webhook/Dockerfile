@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# Copyright (c) 2020 Tom Kralidis
+# Copyright (c) 2023 Tom Kralidis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -33,4 +33,4 @@ WORKDIR /
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--access-logfile", "-", "--workers", "3", "--bind", "0.0.0.0:8001", "deploy_webhook:application"]
+CMD ["gunicorn", "--access-logfile", "-", "--workers", "3", "--bind", "0.0.0.0:8001", "--reload", "deploy_webhook:application"]

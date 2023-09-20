@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# Copyright (c) 2020 Tom Kralidis
+# Copyright (c) 2023 Tom Kralidis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -28,6 +28,7 @@ import json
 import logging
 import os
 import subprocess
+from urllib.parse import unquote
 
 BASEDIR = '/opt/demo.pycsw.org'
 LOGGER = logging.getLogger(__name__)
@@ -46,7 +47,7 @@ def is_valid_secret(secret_server, secret, payload):
     if sha_name != 'sha1':
         return False
 
-    mac = hmac.new(secret_server, msg=payload, digestmod=hashlib.sha1)
+    mac = hmac.new(secret_server, msg=payload.encode(), digestmod=hashlib.sha1)
 
     try:
         is_valid = hmac.compare_digest(str(mac.hexdigest()), signature)
@@ -67,9 +68,10 @@ def application(environ, start_response):
 
     # read in request
     length = int(environ.get('CONTENT_LENGTH', '0'))
-    secret_key = environ.get('DEMO_PYCSW_ORG_SECRET_KEY')
+    secret_key = bytes(os.environ.get('DEMO_PYCSW_ORG_SECRET_KEY'), 'utf8')
     signature = environ.get('HTTP_X_HUB_SIGNATURE', None)
-    payload = environ['wsgi.input'].read(length)
+    payload = environ['wsgi.input'].read(length).decode('utf8')
+    payload = unquote(payload).split('payload=')[-1]
 
     try:
         request = json.loads(payload)
