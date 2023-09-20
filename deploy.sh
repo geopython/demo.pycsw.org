@@ -1,7 +1,7 @@
 #!/bin/sh
 ###############################################################################
 #
-# Copyright (c) 2020 Tom Kralidis
+# Copyright (c) 2023 Tom Kralidis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -22,6 +22,9 @@
 # IN THE SOFTWARE.
 #
 ###############################################################################
+
+export DOCKER_CLIENT_TIMEOUT=240
+export COMPOSE_HTTP_TIMEOUT=240
 
 cd /opt/demo.pycsw.org
 docker-compose down

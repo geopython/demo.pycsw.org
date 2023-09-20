@@ -18,6 +18,8 @@ services:
     container_name: demo-pycsw-org-deploy-webhook
     image: geopython/demo.pycsw.org-deploy-webhook
     build: deploy-webhook
+    environment:
+      - DEMO_PYCSW_ORG_SECRET_KEY=${DEMO_PYCSW_ORG_SECRET_KEY}
 
   pycsw-cite:
     container_name: demo-pycsw-org-cite
