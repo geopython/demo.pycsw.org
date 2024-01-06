@@ -25,7 +25,7 @@ services:
     container_name: demo-pycsw-org-cite
     image: geopython/pycsw:latest
     volumes:
-      - ./pycsw/cite/cite.cfg:/etc/pycsw/pycsw.cfg:ro
+      - ./pycsw/cite/cite.yml:/etc/pycsw/pycsw.yml:ro
     environment:
      - SCRIPT_NAME=/cite
 
@@ -33,7 +33,7 @@ services:
     container_name: demo-pycsw-org-gisdata
     image: geopython/pycsw:latest
     volumes:
-      - ./pycsw/gisdata/gisdata.cfg:/etc/pycsw/pycsw.cfg:ro
+      - ./pycsw/gisdata/gisdata.yml:/etc/pycsw/pycsw.yml:ro
       - ./pycsw/gisdata/gisdata.db:/home/pycsw/gisdata/gisdata.db:ro
     environment:
      - SCRIPT_NAME=/gisdata
