@@ -95,3 +95,6 @@ profiles:
 repository:
     database: sqlite:////home/pycsw/gisdata/gisdata.db
     table: records
+    facets:
+        - type
+        - title
