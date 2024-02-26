@@ -101,3 +101,6 @@ metadata:
 repository:
     database: sqlite:////home/pycsw/pycsw/tests/functionaltests/suites/cite/data/cite.db
     table: records
+    facets:
+        - type
+        - title
