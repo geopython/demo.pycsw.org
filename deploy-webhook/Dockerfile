@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# Copyright (c) 2023 Tom Kralidis
+# Copyright (c) 2025 Tom Kralidis
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to
@@ -22,7 +22,7 @@
 #
 ###############################################################################
 
-FROM alpine:3.11
+FROM alpine:latest
 
 MAINTAINER Tom Kralidis <tomkralidis@gmail.com>
 
