@@ -13,6 +13,10 @@ services:
       - ./www:/www:ro
     ports:
       - 80:80
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m
+      retries: 10
 
   deploy-webhook:
     container_name: demo-pycsw-org-deploy-webhook
@@ -20,6 +24,10 @@ services:
     build: deploy-webhook
     environment:
       - DEMO_PYCSW_ORG_SECRET_KEY=${DEMO_PYCSW_ORG_SECRET_KEY}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001"]
+      interval: 1m
+      retries: 10
 
   pycsw-cite:
     container_name: demo-pycsw-org-cite
@@ -28,6 +36,10 @@ services:
       - ./pycsw/cite/cite.yml:/etc/pycsw/pycsw.yml:ro
     environment:
      - SCRIPT_NAME=/cite
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 1m
+      retries: 10
 
   pycsw-gisdata:
     container_name: demo-pycsw-org-gisdata
@@ -37,3 +49,7 @@ services:
       - ./pycsw/gisdata/gisdata.db:/home/pycsw/gisdata/gisdata.db:ro
     environment:
      - SCRIPT_NAME=/gisdata
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 1m
+      retries: 10
