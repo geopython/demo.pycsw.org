@@ -1,0 +1,58 @@
+{
+    "linkset": [
+        {
+            "anchor": "https://demo.pycsw.org/cite",
+            "service-desc": [
+                {
+                    "href": "https://demo.pycsw.org/cite/openapi?f=json",
+                    "title": "This is pycsw's official OGC Reference Implementation. Used for OGC CITE testing.",
+                    "type": "application/vnd.oai.openapi+json"
+                },
+                {
+                    "href": "https://demo.pycsw.org/cite/csw?service=CSW&version=2.0.2&request=GetCapabilities",
+                    "title": "This is pycsw's official OGC Reference Implementation. Used for OGC CITE testing.",
+                    "type": "application/xml"
+                },
+                {
+                    "href": "https://demo.pycsw.org/cite/csw?service=CSW&version=3.0.0&request=GetCapabilities",
+                    "title": "This is pycsw's official OGC Reference Implementation. Used for OGC CITE testing.",
+                    "type": "application/xml"
+                }
+            ],
+            "service-doc": [
+                {
+                    "href": "https://demo.pycsw.org/cite/openapi?f=html",
+                    "title": "This is pycsw's official OGC Reference Implementation. Used for OGC CITE testing.",
+                    "type": "text/html"
+                }
+            ]
+        },
+        {
+            "anchor": "https://demo.pycsw.org/gisdata",
+            "service-desc": [
+                {
+                    "href": "https://demo.pycsw.org/gisdata/openapi?f=json",
+                    "title": "Demo of gisdata GitHub repository",
+                    "type": "application/vnd.oai.openapi+json"
+                },
+                {
+                    "href": "https://demo.pycsw.org/gisdata/csw?service=CSW&version=2.0.2&request=GetCapabilities",
+                    "title": "Demo of gisdata GitHub repository",
+                    "type": "application/xml"
+                },
+                {
+                    "href": "https://demo.pycsw.org/gisdata/csw?service=CSW&version=3.0.0&request=GetCapabilities",
+                    "title": "Demo of gisdata GitHub repository",
+                    "type": "application/xml"
+                }
+            ],
+            "service-doc": [
+                {
+                    "href": "https://demo.pycsw.org/gisdata/openapi?f=html",
+                    "title": "Demo of gisdata GitHub repository",
+                    "type": "text/html"
+                }
+            ]
+        }
+    ]
+}
