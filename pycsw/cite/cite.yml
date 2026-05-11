@@ -4,7 +4,7 @@
 #
 # Authors: Tom Kralidis <tomkralidis@gmail.com>
 #
-# Copyright (c) 2020 Tom Kralidis
+# Copyright (c) 2026 Tom Kralidis
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation
@@ -42,6 +42,15 @@ manager:
     transactions: true
     allowed_ips:
     - 127.0.0.1
+federatedcatalogues:
+    - type: OARec
+      title: WIS2 Discovery Metadata
+      url: https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata
+    - type: STAC-API
+      title: Copernicus Data Space Ecosystem (CDSE) asset-level STAC catalogue
+      url: https://stac.dataspace.copernicus.eu/v1
+      collections:
+          - ccm-optical
 metadata:
     identification:
         title: pycsw OGC CITE demo and Reference Implementation
