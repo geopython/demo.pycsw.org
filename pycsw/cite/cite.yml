@@ -43,10 +43,12 @@ manager:
     allowed_ips:
     - 127.0.0.1
 federatedcatalogues:
-    - type: OARec
+    - id: fedcat01
+      type: OARec
       title: WIS2 Discovery Metadata
       url: https://wis2-gdc.weather.gc.ca/collections/wis2-discovery-metadata
-    - type: STAC-API
+    - id: fedcat02
+      type: STAC-API
       title: Copernicus Data Space Ecosystem (CDSE) asset-level STAC catalogue
       url: https://stac.dataspace.copernicus.eu/v1
       collections:
